@@ -33,10 +33,10 @@ public class Comment implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long idComment;
-	@Column(length = 3000)
+	@Column(nullable = false, length = 3000)
 	private String content;
 	private LocalDateTime date;
-	@Column(length = 20)
+	@Column(nullable = false, length = 20)
 	private Author authorsName;
 
 }

@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import br.com.blogapi.model.author.Author;
+import br.com.blogapi.model.comment.Comment;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -36,13 +37,15 @@ public class New implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long idNew;
-	@Column(length = 80)
+	@Column(nullable = false, length = 80)
 	private String title;
 	private LocalDateTime dateTime;
-	@Column(length = 3000)
+	@Column(nullable = false, length = 3000)
 	private String content;
 	@OneToOne
+	@Column(nullable = false)
 	private Author authorName;
+	private List<Comment> comments;
 	@ElementCollection
 	private List<String> tags;
 

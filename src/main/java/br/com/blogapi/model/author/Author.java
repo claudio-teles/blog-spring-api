@@ -31,7 +31,7 @@ public class Author implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long idAuthor;
-	@Column(length = 20)
+	@Column(nullable = false, length = 20)
 	private String authorsName;
 
 }
