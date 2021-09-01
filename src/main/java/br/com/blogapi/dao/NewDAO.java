@@ -1,4 +1,4 @@
-package br.com.blogapi.dao.news;
+package br.com.blogapi.dao;
 
 import java.util.Optional;
 
@@ -7,9 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import br.com.blogapi.model.news.New;
-import br.com.blogapi.repository.news.NewPaginationRepository;
-import br.com.blogapi.repository.news.NewRepository;
+import br.com.blogapi.model.New;
+import br.com.blogapi.repository.NewPaginationRepository;
+import br.com.blogapi.repository.NewRepository;
 
 @Repository
 public class NewDAO {
@@ -27,10 +27,6 @@ public class NewDAO {
 		return newRepository.findById(idNew);
 	}
 	
-	public Boolean existNew(String title) {
-		return newRepository.existsByTitle(title);
-	}
-	
 	public Page<New> listAllNewsPageable(Pageable pageable) {
 		return newPaginationRepository.findAllOrderByIdAsc(pageable);
 	}
@@ -42,5 +38,9 @@ public class NewDAO {
 	public Optional<New> getNew(String title) {
 		return newRepository.findByTitle(title);
 	}
-
+	
+	public void deleteNew(New _new) {
+		newRepository.delete(_new);
+	}
+	
 }

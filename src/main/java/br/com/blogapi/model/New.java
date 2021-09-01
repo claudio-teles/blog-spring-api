@@ -1,22 +1,21 @@
  	/**
  * 
  */
-package br.com.blogapi.model.news;
+package br.com.blogapi.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import br.com.blogapi.model.author.Author;
-import br.com.blogapi.model.comment.Comment;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -42,11 +41,12 @@ public class New implements Serializable {
 	private LocalDateTime dateTime;
 	@Column(nullable = false, length = 3000)
 	private String content;
-	@OneToOne
 	@Column(nullable = false)
+	@OneToOne(cascade = CascadeType.REMOVE)
 	private Author authorName;
+	@OneToMany(cascade = CascadeType.REMOVE)
 	private List<Comment> comments;
-	@ElementCollection
+	@OneToMany(cascade = CascadeType.REMOVE)
 	private List<String> tags;
 
 }

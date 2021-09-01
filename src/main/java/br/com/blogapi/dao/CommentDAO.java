@@ -1,10 +1,10 @@
-package br.com.blogapi.dao.comment;
+package br.com.blogapi.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import br.com.blogapi.model.comment.Comment;
-import br.com.blogapi.repository.comment.CommentRepository;
+import br.com.blogapi.model.Comment;
+import br.com.blogapi.repository.CommentRepository;
 
 @Repository
 public class CommentDAO {

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package br.com.blogapi.model.author;
+package br.com.blogapi.model;
 
 import java.io.Serializable;
 
@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import br.com.blogapi.enumeration.Gender;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -33,5 +34,6 @@ public class Author implements Serializable {
 	private Long idAuthor;
 	@Column(nullable = false, length = 20)
 	private String authorsName;
+	private Gender gender;
 
 }

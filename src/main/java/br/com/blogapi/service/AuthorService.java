@@ -1,10 +1,10 @@
-package br.com.blogapi.service.author;
+package br.com.blogapi.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.blogapi.dao.author.AuthorDAO;
-import br.com.blogapi.model.author.Author;
+import br.com.blogapi.dao.AuthorDAO;
+import br.com.blogapi.model.Author;
 
 @Service
 public class AuthorService {
@@ -15,7 +15,7 @@ public class AuthorService {
 	public Author save(Author author) throws Exception {
 		if ((author.getAuthorsName() != null)) {
 			if ((author.getAuthorsName().equals(""))) {
-				throw new Exception("Blank author name exception");
+				throw new Exception("Blank author exception");
 			} else {
 				return authorDAO.createAuthor(author);
 			}

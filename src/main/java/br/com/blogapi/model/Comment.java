@@ -1,7 +1,7 @@
 /**
  * 
  */
-package br.com.blogapi.model.comment;
+package br.com.blogapi.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -12,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import br.com.blogapi.model.author.Author;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
