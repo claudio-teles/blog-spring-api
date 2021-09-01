@@ -8,6 +8,6 @@ import br.com.blogapi.model.New;
 
 public interface NewPaginationRepository extends PagingAndSortingRepository<New, Long> {
 	
-	Page<New> findAllOrderByIdAsc(Pageable pageable);
+	Page<New> findAll(Pageable pageable);
 	
 }

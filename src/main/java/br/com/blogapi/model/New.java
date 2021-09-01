@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -41,12 +42,12 @@ public class New implements Serializable {
 	private LocalDateTime dateTime;
 	@Column(nullable = false, length = 3000)
 	private String content;
-	@Column(nullable = false)
 	@OneToOne(cascade = CascadeType.REMOVE)
+	@JoinColumn(nullable = false)
 	private Author authorName;
 	@OneToMany(cascade = CascadeType.REMOVE)
 	private List<Comment> comments;
 	@OneToMany(cascade = CascadeType.REMOVE)
-	private List<String> tags;
+	private List<Tag> tags;
 
 }

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package br.com.blogapi.model;
 
 import java.io.Serializable;
@@ -11,31 +8,25 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import br.com.blogapi.enumeration.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @author claudio
- *
- */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
-public class Author implements Serializable {
+public class Tag implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8568870148278712316L;
+	private static final long serialVersionUID = -5312514817403129932L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long idAuthor;
+	private Long idTag;
 	@Column(nullable = false, length = 20)
-	private String authorsName;
-	private Gender gender;
+	private String value;
 
 }

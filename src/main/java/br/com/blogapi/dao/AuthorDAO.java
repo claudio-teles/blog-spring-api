@@ -1,5 +1,7 @@
 package br.com.blogapi.dao;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,5 +17,8 @@ public class AuthorDAO {
 	public Author createAuthor(Author author) {
 		return authorRepository.save(author);
 	}
-
+	
+	public Optional<Author> getId(Long idAuthor) {
+		return authorRepository.findById(idAuthor);
+	}
 }

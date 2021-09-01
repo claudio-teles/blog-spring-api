@@ -19,19 +19,24 @@ public class CommentService {
 	@Autowired
 	private CommentDAO commentDAO;
 	
-	@SuppressWarnings("unlikely-arg-type")
 	public Comment save(Comment comment) throws Exception {
 		
 		if (comment != null) {
-			if (comment.getAuthorsName().equals("")) {
-				throw new Exception("Blank author exception");
-			}
 			if (comment.getContent().equals("")) {
 				throw new Exception("Blank content exception");
 			}
-			commentDAO.createComment(comment);
+			return commentDAO.createComment(comment);
 		}
+		throw new NullPointerException();
 		
+	}
+	
+	public Comment find(Long idCommment) {
+		if (idCommment != null) {
+			if (commentDAO.getId(idCommment).isPresent()) {
+				return commentDAO.getId(idCommment).get();
+			}
+		}
 		throw new NullPointerException();
 	}
 

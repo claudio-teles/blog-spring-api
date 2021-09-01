@@ -10,6 +10,6 @@ import br.com.blogapi.model.New;
 public interface NewRepository extends JpaRepository<New, Long> {
 	
 	Optional<New> findByTitle(String title);
-	List<New> findAllOrderByIdAsc();
+	List<New> findAll();
 
 }

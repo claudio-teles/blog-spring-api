@@ -11,7 +11,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +23,7 @@ import lombok.NoArgsConstructor;
  *
  */
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Entity
 public class Comment implements Serializable {
@@ -35,7 +39,8 @@ public class Comment implements Serializable {
 	@Column(nullable = false, length = 3000)
 	private String content;
 	private LocalDateTime date;
-	@Column(nullable = false, length = 20)
-	private Author authorsName;
+	@OneToOne
+	@JoinColumn(nullable = false)
+	private Author author;
 
 }

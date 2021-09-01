@@ -1,5 +1,7 @@
 package br.com.blogapi.dao;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +16,10 @@ public class CommentDAO {
 	
 	public Comment createComment(Comment comment) {
 		return commentRepository.save(comment);
+	}
+	
+	public Optional<Comment> getId(Long idComment) {
+		return commentRepository.findById(idComment);
 	}
 
 }

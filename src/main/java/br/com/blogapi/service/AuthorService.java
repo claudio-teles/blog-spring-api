@@ -1,5 +1,7 @@
 package br.com.blogapi.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,14 @@ public class AuthorService {
 			}
 		} else {
 			throw new NullPointerException();
+		}
+	}
+	
+	public Optional<Author> loadAuthor(Long idAuthor) {
+		if (idAuthor != null) {
+			return authorDAO.getId(idAuthor);
+		} else {
+			return null;
 		}
 	}
 

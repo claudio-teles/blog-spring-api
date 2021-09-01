@@ -28,11 +28,11 @@ public class NewDAO {
 	}
 	
 	public Page<New> listAllNewsPageable(Pageable pageable) {
-		return newPaginationRepository.findAllOrderByIdAsc(pageable);
+		return newPaginationRepository.findAll(pageable);
 	}
 	
 	public Iterable<New> listAllNews() {
-		return newRepository.findAllOrderByIdAsc();
+		return newRepository.findAll();
 	}
 	
 	public Optional<New> getNew(String title) {
