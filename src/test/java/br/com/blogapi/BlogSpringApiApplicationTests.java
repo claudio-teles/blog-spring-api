@@ -37,6 +37,7 @@ class BlogSpringApiApplicationTests {
 	@Autowired
 	private TagService tagService;
 	private List<Comment> comments = new ArrayList<>();
+	private List<Tag> tags1 = new ArrayList<>();
 	
 	@Test
 	@Order(1)
@@ -132,6 +133,17 @@ class BlogSpringApiApplicationTests {
 	@Test
 	@Order(3)
 	void createNewTest() throws Exception {
+		comments.clear();
+		comments.add(commentService.find(11L));
+		comments.add(commentService.find(12L));
+		comments.add(commentService.find(13L));
+		comments.add(commentService.find(14L));
+		comments.add(commentService.find(15L));
+		comments.add(commentService.find(16L));
+		comments.add(commentService.find(17L));
+		comments.add(commentService.find(18L));
+		comments.add(commentService.find(19L));
+		comments.add(commentService.find(20L));
 		
 		Tag tag1 = new Tag(null, "#tag1");
 		Tag tag2 = new Tag(null, "#tag2");
@@ -145,7 +157,6 @@ class BlogSpringApiApplicationTests {
 		tagService.save(tag4);
 		tagService.save(tag5);
 		
-		List<Tag> tags1 = new ArrayList<>();
 		tags1.add(tagService.findTag(21L));
 		tags1.add(tagService.findTag(24L));
 		tags1.add(tagService.findTag(22L));
@@ -154,59 +165,59 @@ class BlogSpringApiApplicationTests {
 		
 		
 		New n1 = new New(
-				null, "Title 1", LocalDateTime.of(1991, Month.APRIL, 14, LocalDateTime.now().getDayOfMonth(), 
+					null, "Title 1", LocalDateTime.of(1991, Month.APRIL, 14, LocalDateTime.now().getDayOfMonth(), 
 						LocalDateTime.now().getHour()), "New 1", authorService.loadAuthor(1L).get(), comments, tags1
 				);
 		New n2 = new New(
-				null, "Title 2", LocalDateTime.of(1995, Month.OCTOBER, 28, LocalDateTime.now().getDayOfMonth(), 
+					null, "Title 2", LocalDateTime.of(1995, Month.OCTOBER, 28, LocalDateTime.now().getDayOfMonth(), 
 						LocalDateTime.now().getHour()), "New 2", authorService.loadAuthor(1L).get(), comments, tags1
 				);
 		New n3 = new New(
-				null, "Title 3", LocalDateTime.of(2000, Month.DECEMBER, 14, LocalDateTime.now().getDayOfMonth(), 
+					null, "Title 3", LocalDateTime.of(2000, Month.DECEMBER, 14, LocalDateTime.now().getDayOfMonth(), 
 						LocalDateTime.now().getHour()), "New 3", authorService.loadAuthor(1L).get(), comments, tags1
 				);
 		New n4 = new New(
-				null, "Title 4", LocalDateTime.of(2003, Month.FEBRUARY, 27, LocalDateTime.now().getDayOfMonth(), 
+					null, "Title 4", LocalDateTime.of(2003, Month.FEBRUARY, 27, LocalDateTime.now().getDayOfMonth(), 
 						LocalDateTime.now().getHour()), "New 4", authorService.loadAuthor(1L).get(), comments, tags1
 				);
 		New n5 = new New(
-				null, "Title 5", LocalDateTime.of(2000, Month.NOVEMBER, 14, LocalDateTime.now().getDayOfMonth(), 
+					null, "Title 5", LocalDateTime.of(2000, Month.NOVEMBER, 14, LocalDateTime.now().getDayOfMonth(), 
 						LocalDateTime.now().getHour()), "New 5", authorService.loadAuthor(1L).get(), comments, tags1
 				);
 		New n6 = new New(
-				null, "Title 6", LocalDateTime.of(1999, Month.JANUARY, 14, LocalDateTime.now().getDayOfMonth(), 
+					null, "Title 6", LocalDateTime.of(1999, Month.JANUARY, 14, LocalDateTime.now().getDayOfMonth(), 
 						LocalDateTime.now().getHour()), "New 6", authorService.loadAuthor(1L).get(), comments, tags1
 				);
 		New n7 = new New(
-				null, "Title 7", LocalDateTime.of(2003, Month.APRIL, 14, LocalDateTime.now().getDayOfMonth(), 
+					null, "Title 7", LocalDateTime.of(2003, Month.APRIL, 14, LocalDateTime.now().getDayOfMonth(), 
 						LocalDateTime.now().getHour()), "New 7", authorService.loadAuthor(1L).get(), comments, tags1
 				);
 		New n8 = new New(
-				null, "Title 8", LocalDateTime.of(1988, Month.JULY, 14, LocalDateTime.now().getDayOfMonth(), 
+					null, "Title 8", LocalDateTime.of(1988, Month.JULY, 14, LocalDateTime.now().getDayOfMonth(), 
 						LocalDateTime.now().getHour()), "New 8", authorService.loadAuthor(1L).get(), comments, tags1
 				);
 		New n9 = new New(
-				null, "Title 9", LocalDateTime.of(1989, Month.MAY, 14, LocalDateTime.now().getDayOfMonth(), 
+					null, "Title 9", LocalDateTime.of(1989, Month.MAY, 14, LocalDateTime.now().getDayOfMonth(), 
 						LocalDateTime.now().getHour()), "New 9", authorService.loadAuthor(1L).get(), comments, tags1
 				);
 		New n10 = new New(
-				null, "Title 10", LocalDateTime.of(2007, Month.APRIL, 14, LocalDateTime.now().getDayOfMonth(), 
+					null, "Title 10", LocalDateTime.of(2007, Month.APRIL, 14, LocalDateTime.now().getDayOfMonth(), 
 						LocalDateTime.now().getHour()), "New 10", authorService.loadAuthor(1L).get(), comments, tags1
 				);
 		New n11 = new New(
-				null, "Title 11", LocalDateTime.of(1991, Month.AUGUST, 14, LocalDateTime.now().getDayOfMonth(), 
+					null, "Title 11", LocalDateTime.of(1991, Month.AUGUST, 14, LocalDateTime.now().getDayOfMonth(), 
 						LocalDateTime.now().getHour()), "New 11", authorService.loadAuthor(1L).get(), comments, tags1
 				);
 		New n12 = new New(
-				null, "Title 12", LocalDateTime.of(1991, Month.JUNE, 14, LocalDateTime.now().getDayOfMonth(), 
+					null, "Title 12", LocalDateTime.of(1991, Month.JUNE, 14, LocalDateTime.now().getDayOfMonth(), 
 						LocalDateTime.now().getHour()), "New 12", authorService.loadAuthor(1L).get(), comments, tags1
 				);
 		New n13 = new New(
-				null, "Title 13", LocalDateTime.of(1991, Month.MARCH, 14, LocalDateTime.now().getDayOfMonth(), 
+					null, "Title 13", LocalDateTime.of(1991, Month.MARCH, 14, LocalDateTime.now().getDayOfMonth(), 
 						LocalDateTime.now().getHour()), "New 13", authorService.loadAuthor(1L).get(), comments, tags1
 				);
 		New n14 = new New(
-				null, "Title 14", LocalDateTime.of(1991, Month.NOVEMBER, 14, LocalDateTime.now().getDayOfMonth(), 
+					null, "Title 14", LocalDateTime.of(1991, Month.NOVEMBER, 14, LocalDateTime.now().getDayOfMonth(), 
 						LocalDateTime.now().getHour()), "New 14", authorService.loadAuthor(1L).get(), comments, tags1
 				);
 		New n15 = new New(
@@ -231,7 +242,33 @@ class BlogSpringApiApplicationTests {
 		assertEquals(40L, newService.save(n15).getIdNew());
 	}
 	
-	
-	
+	@Test
+	@Order(4)
+	void findNewById() {
+		comments.clear();
+		comments.add(commentService.find(11L));
+		comments.add(commentService.find(12L));
+		comments.add(commentService.find(13L));
+		comments.add(commentService.find(14L));
+		comments.add(commentService.find(15L));
+		comments.add(commentService.find(16L));
+		comments.add(commentService.find(17L));
+		comments.add(commentService.find(18L));
+		comments.add(commentService.find(19L));
+		comments.add(commentService.find(20L));
+		
+		tags1.clear();	
+		tags1.add(tagService.findTag(21L));
+		tags1.add(tagService.findTag(24L));
+		tags1.add(tagService.findTag(22L));
+		tags1.add(tagService.findTag(23L));
+		tags1.add(tagService.findTag(25L));
+		
+		New n1 = new New(
+					26L, "Title 1", LocalDateTime.of(1991, Month.APRIL, 14, LocalDateTime.now().getDayOfMonth(), 
+						LocalDateTime.now().getHour()), "New 1", authorService.loadAuthor(1L).get(), comments, tags1
+				);
+		assertEquals(n1, newService.find(26L));
+	}
 
 }

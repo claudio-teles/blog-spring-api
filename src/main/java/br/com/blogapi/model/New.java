@@ -17,6 +17,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -48,8 +51,10 @@ public class New implements Serializable {
 	@JoinColumn(nullable = false)
 	private Author authorName;
 	@OneToMany(cascade = CascadeType.REMOVE)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Comment> comments;
 	@OneToMany(cascade = CascadeType.REMOVE)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Tag> tags;
 
 }
