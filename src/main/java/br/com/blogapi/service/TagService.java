@@ -21,5 +21,14 @@ public class TagService {
 		}
 		throw new NullPointerException();
 	}
+	
+	public Tag findTag(Long idTag) {
+		if (idTag != null) {
+			if (tagDAO.load(idTag).isPresent()) {
+				return tagDAO.load(idTag).get();
+			}
+		}
+		throw new NullPointerException();
+	}
 
 }
