@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -47,13 +46,13 @@ public class New implements Serializable {
 	private LocalDateTime dateTime;
 	@Column(nullable = false, length = 3000)
 	private String content;
-	@OneToOne(cascade = CascadeType.REMOVE)
+	@OneToOne
 	@JoinColumn(nullable = false)
 	private Author authorName;
-	@OneToMany(cascade = CascadeType.REMOVE)
+	@OneToMany
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Comment> comments;
-	@OneToMany(cascade = CascadeType.REMOVE)
+	@OneToMany
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Tag> tags;
 

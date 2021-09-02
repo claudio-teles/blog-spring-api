@@ -1,6 +1,7 @@
 package br.com.blogapi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -258,7 +259,7 @@ class BlogSpringApiApplicationTests {
 	 */
 	@Test
 	@Order(4)
-	void findNewById() {
+	void findNewByIdTest() {
 		comments.clear();
 		comments.add(commentService.find(11L));
 		comments.add(commentService.find(12L));
@@ -290,7 +291,7 @@ class BlogSpringApiApplicationTests {
 	 */
 	@Test
 	@Order(5)
-	void findNewsLikeTitle() {
+	void findNewsLikeTitleTest() {
 		try {
 			assertEquals(1, newService.find("Title 2").size());
 		} catch (Exception e) {
@@ -306,7 +307,7 @@ class BlogSpringApiApplicationTests {
 	 */
 	@Test
 	@Order(6)
-	void findNewsWithPages() {
+	void findNewsWithPagesTest() {
 		try {
 			assertEquals(3, newService.listNewsWithPages(4, 3).getContent().size());
 			
@@ -320,8 +321,41 @@ class BlogSpringApiApplicationTests {
 	 */
 	@Test
 	@Order(7)
-	void listAllNew() {
+	void listAllNewTest() {
 		assertEquals(15, newService.listAllNews().size());
+	}
+	
+	/**
+	 * Testar a atualização de uma noticia, as duas noticias n1 e n2 inicialmente iguais, mundando n1.setContent(), n1 e n2 são diferentes agora e n1 foi atualizado
+	 */
+	@Test
+	@Order(8)
+	void updateNewTest() {
+		New n1 = newService.find(35L);
+		New n2 = n1;
+		n1.setContent("New 10 updated");
+		try {
+			n2 = newService.uptate(n1.getIdNew(), n1);
+			assertNotEquals(n1, n2);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Testar a exclusão de uma noticia
+	 */
+	@Test
+	@Order(9)
+	void deleteNewTest() {
+		int quantityNewBefore = newService.listAllNews().size();
+		int quantityNewAfter = quantityNewBefore;// Antes do teste, as quantidades são iguais
+		
+		newService.delete(newService.find(40L));// Excluir uma noticia e diminuir a quantidade
+		
+		quantityNewAfter = newService.listAllNews().size();// A nova quantidade
+		
+		assertNotEquals(quantityNewBefore, quantityNewAfter);// Não tem mais a mesma quantidade
 	}
 
 }
