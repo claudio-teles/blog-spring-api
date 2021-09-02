@@ -1,5 +1,6 @@
 package br.com.blogapi.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +32,12 @@ public class NewDAO {
 		return newPaginationRepository.findAll(pageable);
 	}
 	
-	public Iterable<New> listAllNews() {
+	public List<New> listAllNews() {
 		return newRepository.findAll();
 	}
 	
-	public Optional<New> getNew(String title) {
-		return newRepository.findByTitle(title);
+	public List<New> getNew(String title) {
+		return newRepository.findByTitleContaining(title);
 	}
 	
 	public void deleteNew(New _new) {

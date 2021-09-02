@@ -1,5 +1,7 @@
 package br.com.blogapi.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,14 +40,13 @@ public class NewService {
 		throw new NullPointerException();
 	}
 	
-	public New find(String title) throws Exception {
+	public List<New> find(String title) throws Exception {
 		
 		if (title != null ) {
 			if (title.equals("")) {
 				throw new Exception("Blank title exception");
-			} else if (newDAO.getNew(title).isPresent()) {
-				return newDAO.getNew(title).get();
 			}
+			return newDAO.getNew(title);
 		}
 		
 		throw new NullPointerException();
@@ -60,7 +61,7 @@ public class NewService {
 		throw new NullPointerException();
 	}
 	
-	public Iterable<New> listAllNews() {
+	public List<New> listAllNews() {
 		return newDAO.listAllNews();
 	}
 	

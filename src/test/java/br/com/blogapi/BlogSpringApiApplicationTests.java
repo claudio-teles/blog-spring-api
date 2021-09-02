@@ -39,6 +39,9 @@ class BlogSpringApiApplicationTests {
 	private List<Comment> comments = new ArrayList<>();
 	private List<Tag> tags1 = new ArrayList<>();
 	
+	/**
+	 * Testar a criação da entidade Author
+	 */
 	@Test
 	@Order(1)
 	void createAuthorTest() {
@@ -58,6 +61,9 @@ class BlogSpringApiApplicationTests {
 		}
 	}
 	
+	/**
+	 * Testar a criação da entidade Comment
+	 */
 	@Test
 	@Order(2)
 	void createCommentTest() {
@@ -130,6 +136,11 @@ class BlogSpringApiApplicationTests {
 		}
 	}
 	
+	/**
+	 * Testar a criação da entidade New
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	@Order(3)
 	void createNewTest() throws Exception {
@@ -242,6 +253,9 @@ class BlogSpringApiApplicationTests {
 		assertEquals(40L, newService.save(n15).getIdNew());
 	}
 	
+	/**
+	 * Testar a obtenção de uma noticia pelo o id dela
+	 */
 	@Test
 	@Order(4)
 	void findNewById() {
@@ -269,6 +283,45 @@ class BlogSpringApiApplicationTests {
 						LocalDateTime.now().getHour()), "New 1", authorService.loadAuthor(1L).get(), comments, tags1
 				);
 		assertEquals(n1, newService.find(26L));
+	}
+	
+	/**
+	 * Testar a pesquisa de uma noticia pelo o titulo dela, semelhante ao recurso LIKE das linguagens de SQL. ex: select n from New n where n.title like '%{termo de pesquisa}%'
+	 */
+	@Test
+	@Order(5)
+	void findNewsLikeTitle() {
+		try {
+			assertEquals(1, newService.find("Title 2").size());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Testar a exibição de lista de noticias com uma quantidade específica de itens em cada página
+	 * 
+	 * De 0 até 4 temos 5 páginas com três noticias em cada página de um total de 15 noticias em todas as páginas;
+	 * para mudar de página para outra, basta fazer assim: newService.listNewsWithPages(0, 3), newService.listNewsWithPages(1, 3), ... até newService.listNewsWithPages(4, 3)
+	 */
+	@Test
+	@Order(6)
+	void findNewsWithPages() {
+		try {
+			assertEquals(3, newService.listNewsWithPages(4, 3).getContent().size());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Testar a obtenção da quantidade de noticias publicadas, o valor esperado é 15.
+	 */
+	@Test
+	@Order(7)
+	void listAllNew() {
+		assertEquals(15, newService.listAllNews().size());
 	}
 
 }
