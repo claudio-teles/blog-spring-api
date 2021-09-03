@@ -1,4 +1,4 @@
-package br.com.blogapi;
+﻿package br.com.blogapi;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
@@ -46,7 +46,7 @@ import br.com.blogapi.service.TagService;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @TestMethodOrder(OrderAnnotation.class)
-class BlogSpringApiApplicationTests {
+class BlogSpringApiApplicationTests { 
 	
 	@Autowired
 	private AuthorService authorService;
