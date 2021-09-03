@@ -1,8 +1,10 @@
 package br.com.blogapi;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
@@ -411,7 +413,15 @@ class BlogSpringApiApplicationTests {
 		tagsTest.add(tagService.findTag(43L));
 		tagsTest.add(tagService.findTag(44L));
 		
-		New n = new New(null, "Title test 1", LocalDateTime.now(), "Content test 1", authorService.loadAuthor(42L).get(), commentsTest, tagsTest);
+		New n = New.builder()
+			.idNew(null)
+			.title("Title test 1")
+			.dateTime(LocalDateTime.now())
+			.content("Content test 1")
+			.authorName(authorService.loadAuthor(42L).get())
+			.comments(commentsTest)
+			.tags(tagsTest)
+			.build();
 		
 		this.mockMvc
 	      .perform(
@@ -424,5 +434,17 @@ class BlogSpringApiApplicationTests {
 	    	      .andExpect(status().isCreated())
 	    	      .andExpect(MockMvcResultMatchers.jsonPath("$.idNew").exists());
 	}
+	
+	@Test
+	@Order(12)
+	void findNewControllerTest() throws Exception {
+		this.mockMvc.perform(
+					MockMvcRequestBuilders
+					.get("/new/42")
+					.contentType(MediaType.APPLICATION_JSON)
+				).andExpect(status().isOk())
+				.andExpect(jsonPath("$.content", is("Content test 1")));
+	}
+	
 
 }
