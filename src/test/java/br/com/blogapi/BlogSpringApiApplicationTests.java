@@ -12,6 +12,7 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -336,7 +337,7 @@ class BlogSpringApiApplicationTests {
 	@Order(6)
 	void findNewsWithPagesTest() {
 		try {
-			assertEquals(3, newService.listNewsWithPages(4, 3).getContent().size());
+			assertEquals(3, newService.listNewsWithPages(4, 3).size());
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -387,7 +388,7 @@ class BlogSpringApiApplicationTests {
 	
 	@Test
 	@Order(10)
-	public void welcomeShouldReturnDefaultMessage() throws Exception {
+	public void welcomeShouldReturnDefaultMessageTest() throws Exception {
 		assertThat(this.testRestTemplate.getForObject("http://localhost:"+port+"/", String.class).contains(
 					"{\r\n"
 					+ "	\"message\":\"Welcome!\"\r\n"
@@ -397,7 +398,7 @@ class BlogSpringApiApplicationTests {
 	
 	@Test
 	@Order(11)
-	public void postNew() throws Exception {
+	public void postNewTest() throws Exception {
 		Author author = new Author(null, "Author test 1", Gender.MALE);
 		authorService.save(author);
 		
@@ -423,8 +424,10 @@ class BlogSpringApiApplicationTests {
 			.tags(tagsTest)
 			.build();
 		
+		newService.save(n);
+		
 		this.mockMvc
-	      .perform(
+	    .perform(
 	    		  MockMvcRequestBuilders
 		    	      .post("/new")
 		    	      .content(objectMapper.writeValueAsString(n))
@@ -437,14 +440,73 @@ class BlogSpringApiApplicationTests {
 	
 	@Test
 	@Order(12)
-	void findNewControllerTest() throws Exception {
-		this.mockMvc.perform(
-					MockMvcRequestBuilders
-					.get("/new/42")
-					.contentType(MediaType.APPLICATION_JSON)
+	void findNewGetByIdTest() throws Exception {
+		this.mockMvc
+		.perform(
+				MockMvcRequestBuilders
+				.get("/new/{idNew}", "45")
+				.contentType(MediaType.APPLICATION_JSON)
 				).andExpect(status().isOk())
-				.andExpect(jsonPath("$.content", is("Content test 1")));
+		.andExpect(jsonPath("$.content", is("Content test 1")));
 	}
 	
+	@Test
+	@Order(13)
+	void findNewGetByTitleTest() throws Exception {
+		this.mockMvc
+		.perform(
+				MockMvcRequestBuilders
+				.get("/new")
+				.queryParam("title", "Title 14")
+				.contentType(MediaType.APPLICATION_JSON)
+				).andExpect(status().isOk())
+		.andExpect(jsonPath("$.[0].content", is("New 14")));
+	}
+	
+	@Test
+	@Order(14)
+	void findNewGetByPaginationTest() throws Exception {
+		this.mockMvc
+		.perform(
+					MockMvcRequestBuilders
+					.get("/new/pages")
+					.queryParam("topOfPage", "0")
+					.queryParam("endOfPage", "2")
+					.contentType(MediaType.APPLICATION_JSON)
+				).andExpect(status().isOk())
+				.andExpect(jsonPath("$", Matchers.hasSize(2)));
+	}
+	
+	@Test
+	@Order(14)
+	public void updateNewControlerTest() throws Exception {
+		New nUpdate = newService.find(34L);
+		nUpdate.setContent("Content test 1 updated!");
+		
+		this.mockMvc
+		.perform(
+					MockMvcRequestBuilders
+						.put("/new")
+						.content(objectMapper.writeValueAsString(nUpdate))
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+				)
+		.andExpect(status().isOk())
+		.andExpect(MockMvcResultMatchers.jsonPath("$.content").value("Content test 1 updated!"));
+	}
+	
+	@Test
+	@Order(15)
+	public void deleteNewControlerByIdNewTest() throws Exception {
+		this.mockMvc
+		.perform(
+					MockMvcRequestBuilders
+						.delete("/new")
+						.param("idNew", "37")
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+				)
+		.andExpect(status().isOk());
+	}
 
 }

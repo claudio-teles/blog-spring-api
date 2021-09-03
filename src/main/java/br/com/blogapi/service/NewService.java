@@ -3,7 +3,6 @@ package br.com.blogapi.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -52,10 +51,10 @@ public class NewService {
 		throw new NullPointerException();
 	}
 	
-	public Page<New> listNewsWithPages(Integer topOfPage, Integer endOfPage) {
+	public List<New> listNewsWithPages(Integer topOfPage, Integer endOfPage) {
 		
 		if (topOfPage != null && endOfPage != null) {
-			return newDAO.listAllNewsPageable(PageRequest.of(topOfPage, endOfPage));
+			return newDAO.listAllNewsPageable(PageRequest.of(topOfPage, endOfPage)).getContent();
 		}
 		
 		throw new NullPointerException();
