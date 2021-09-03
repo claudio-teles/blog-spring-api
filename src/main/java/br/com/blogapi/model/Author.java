@@ -13,6 +13,7 @@ import javax.persistence.Id;
 
 import br.com.blogapi.enumeration.Gender;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +24,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder
 @Entity
 public class Author implements Serializable {
 

@@ -12,6 +12,7 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -27,6 +28,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -388,7 +390,7 @@ class BlogSpringApiApplicationTests {
 	
 	@Test
 	@Order(10)
-	public void welcomeShouldReturnDefaultMessageTest() throws Exception {
+	void welcomeShouldReturnDefaultMessageTest() throws Exception {
 		assertThat(this.testRestTemplate.getForObject("http://localhost:"+port+"/", String.class).contains(
 					"{\r\n"
 					+ "	\"message\":\"Welcome!\"\r\n"
@@ -398,7 +400,7 @@ class BlogSpringApiApplicationTests {
 	
 	@Test
 	@Order(11)
-	public void postNewTest() throws Exception {
+	void postNewTest() throws Exception {
 		Author author = new Author(null, "Author test 1", Gender.MALE);
 		authorService.save(author);
 		
@@ -478,8 +480,8 @@ class BlogSpringApiApplicationTests {
 	}
 	
 	@Test
-	@Order(14)
-	public void updateNewControlerTest() throws Exception {
+	@Order(15)
+	void updateNewControlerTest() throws Exception {
 		New nUpdate = newService.find(34L);
 		nUpdate.setContent("Content test 1 updated!");
 		
@@ -496,17 +498,120 @@ class BlogSpringApiApplicationTests {
 	}
 	
 	@Test
-	@Order(15)
-	public void deleteNewControlerByIdNewTest() throws Exception {
+	@Order(16)
+	void deleteNewControlerByIdNewTest() throws Exception {
 		this.mockMvc
 		.perform(
 					MockMvcRequestBuilders
-						.delete("/new")
-						.param("idNew", "37")
+						.delete("/new/{idNew}", "37")
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 				)
 		.andExpect(status().isOk());
 	}
-
+	
+	@Test
+	@Order(17)
+	void updateCommentControllerTest() throws Exception {
+		Author reader = Reader.builder().authorsName("Reader 11").gender(Gender.FEMALE).build();
+		authorService.save(reader);
+		Comment comment = Comment.builder().content("New 3 updated").date(LocalDateTime.now()).author(reader).build();
+		Comment c = commentService.save(comment);
+		
+		List<Comment> comments = new ArrayList<>();
+		comments.add(c);
+		New _new = newService.find(29L);
+		_new.setComments(comments);
+		
+		this.mockMvc
+	    .perform(
+	    		  MockMvcRequestBuilders
+		    	      .put("/new/comment")
+		    	      .content(objectMapper.writeValueAsString(_new))
+		    	      .contentType(MediaType.APPLICATION_JSON)
+		    	      .accept(MediaType.APPLICATION_JSON)
+		    	   )
+	    	      .andExpect(status().isOk())
+	    	      .andExpect(MockMvcResultMatchers.jsonPath("$.comments.[0].content").value("New 3 updated"));
+	}
+	
+	
+	@Test
+	@Order(18)
+	void nullPointExecptionPostNewTest() throws Exception {
+		Author author = new Author(null, "Author test 15", Gender.MALE);
+		authorService.save(author);
+		
+		Tag t1 = new Tag(null, "#tag test 1");
+		Tag t2 = new Tag(null, "#tag test 2");
+		
+		tagService.save(t1);
+		tagService.save(t2);
+		
+		List<Comment> commentsTest = new ArrayList<>();
+		
+		List<Tag> tagsTest = new ArrayList<>();
+		tagsTest.add(tagService.findTag(43L));
+		tagsTest.add(tagService.findTag(44L));
+		
+		New n = New.builder()
+			.idNew(null)
+			.title(null)
+			.dateTime(LocalDateTime.now())
+			.content("Content test 1")
+			.authorName(authorService.loadAuthor(42L).get())
+			.comments(commentsTest)
+			.tags(tagsTest)
+			.build();
+		
+		Assertions.assertThatThrownBy( () -> this.mockMvc.perform(
+	    		  MockMvcRequestBuilders
+		    	      .put("/new/comment")
+		    	      .content(objectMapper.writeValueAsString(n))
+		    	      .contentType(MediaType.APPLICATION_JSON)
+		    	      .accept(MediaType.APPLICATION_JSON)
+		    	   )).isInstanceOf(Exception.class);
+	}
+	
+	
+	
+	@Test
+	@Order(19)
+	@ExceptionHandler
+	void blankExecptionPostNewTest() throws Exception {
+		Author author = new Author(null, "Author test 16", Gender.MALE);
+		authorService.save(author);
+		
+		Tag t1 = new Tag(null, "#tag test 1");
+		Tag t2 = new Tag(null, "#tag test 2");
+		
+		tagService.save(t1);
+		tagService.save(t2);
+		
+		List<Comment> commentsTest = new ArrayList<>();
+		
+		List<Tag> tagsTest = new ArrayList<>();
+		tagsTest.add(tagService.findTag(43L));
+		tagsTest.add(tagService.findTag(44L));
+		
+		New n = New.builder()
+			.idNew(null)
+			.title("")
+			.dateTime(LocalDateTime.now())
+			.content("Content test 16")
+			.authorName(authorService.loadAuthor(42L).get())
+			.comments(commentsTest)
+			.tags(tagsTest)
+			.build();
+		
+		Assertions.assertThatThrownBy( () -> this.mockMvc.perform(
+	    		  MockMvcRequestBuilders
+		    	      .put("/new/comment")
+		    	      .content(objectMapper.writeValueAsString(n))
+		    	      .contentType(MediaType.APPLICATION_JSON)
+		    	      .accept(MediaType.APPLICATION_JSON)
+		    	   ))
+			.isInstanceOf(Exception.class);
+	}
+	
 }
