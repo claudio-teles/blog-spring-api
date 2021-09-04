@@ -60,10 +60,6 @@ public class NewService {
 		throw new NullPointerException();
 	}
 	
-	public List<New> listAllNews() {
-		return newDAO.listAllNews();
-	}
-	
 	@SuppressWarnings("unlikely-arg-type")
 	public New uptate(Long idNew, New _new) throws Exception {
 		

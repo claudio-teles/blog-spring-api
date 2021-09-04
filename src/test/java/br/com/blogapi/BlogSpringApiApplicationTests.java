@@ -41,6 +41,7 @@ import br.com.blogapi.model.Tag;
 import br.com.blogapi.service.AuthorService;
 import br.com.blogapi.service.CommentService;
 import br.com.blogapi.service.NewService;
+import br.com.blogapi.service.QueryService;
 import br.com.blogapi.service.TagService;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -55,6 +56,8 @@ class BlogSpringApiApplicationTests {
 	@Autowired
 	private NewService newService;
 	@Autowired
+	private QueryService queryService;
+	@Autowired
 	private TagService tagService;
 	@LocalServerPort
 	private int port;
@@ -67,6 +70,7 @@ class BlogSpringApiApplicationTests {
 	
 	private List<Comment> comments = new ArrayList<>();
 	private List<Tag> tags1 = new ArrayList<>();
+	private List<Tag> tags2 = new ArrayList<>();
 	
 	/**
 	 * Testar a criação da entidade Author
@@ -212,7 +216,7 @@ class BlogSpringApiApplicationTests {
 				);
 		New n2 = new New(
 					null, "Title 2", LocalDateTime.of(1995, Month.OCTOBER, 28, LocalDateTime.now().getDayOfMonth(), 
-						LocalDateTime.now().getHour()), "New 2", authorService.loadAuthor(26L).get(), comments, tags1
+						LocalDateTime.now().getHour()), "New 2", authorService.loadAuthor(26L).get(), comments, tags2
 				);
 		New n3 = new New(
 					null, "Title 3", LocalDateTime.of(2000, Month.DECEMBER, 14, LocalDateTime.now().getDayOfMonth(), 
@@ -228,11 +232,11 @@ class BlogSpringApiApplicationTests {
 				);
 		New n6 = new New(
 					null, "Title 6", LocalDateTime.of(1999, Month.JANUARY, 14, LocalDateTime.now().getDayOfMonth(), 
-						LocalDateTime.now().getHour()), "New 6", authorService.loadAuthor(26L).get(), comments, tags1
+						LocalDateTime.now().getHour()), "New 6", authorService.loadAuthor(26L).get(), comments, tags2
 				);
 		New n7 = new New(
 					null, "Title 7", LocalDateTime.of(2003, Month.APRIL, 14, LocalDateTime.now().getDayOfMonth(), 
-						LocalDateTime.now().getHour()), "New 7", authorService.loadAuthor(26L).get(), comments, tags1
+						LocalDateTime.now().getHour()), "New 7", authorService.loadAuthor(26L).get(), comments, tags2
 				);
 		New n8 = new New(
 					null, "Title 8", LocalDateTime.of(1988, Month.JULY, 14, LocalDateTime.now().getDayOfMonth(), 
@@ -244,7 +248,7 @@ class BlogSpringApiApplicationTests {
 				);
 		New n10 = new New(
 					null, "Title 10", LocalDateTime.of(2007, Month.APRIL, 14, LocalDateTime.now().getDayOfMonth(), 
-						LocalDateTime.now().getHour()), "New 10", authorService.loadAuthor(26L).get(), comments, tags1
+						LocalDateTime.now().getHour()), "New 10", authorService.loadAuthor(26L).get(), comments, tags2
 				);
 		New n11 = new New(
 					null, "Title 11", LocalDateTime.of(1991, Month.AUGUST, 14, LocalDateTime.now().getDayOfMonth(), 
@@ -252,7 +256,7 @@ class BlogSpringApiApplicationTests {
 				);
 		New n12 = new New(
 					null, "Title 12", LocalDateTime.of(1991, Month.JUNE, 14, LocalDateTime.now().getDayOfMonth(), 
-						LocalDateTime.now().getHour()), "New 12", authorService.loadAuthor(26L).get(), comments, tags1
+						LocalDateTime.now().getHour()), "New 12", authorService.loadAuthor(26L).get(), comments, tags2
 				);
 		New n13 = new New(
 					null, "Title 13", LocalDateTime.of(1991, Month.MARCH, 14, LocalDateTime.now().getDayOfMonth(), 
@@ -260,7 +264,7 @@ class BlogSpringApiApplicationTests {
 				);
 		New n14 = new New(
 					null, "Title 14", LocalDateTime.of(1991, Month.NOVEMBER, 14, LocalDateTime.now().getDayOfMonth(), 
-						LocalDateTime.now().getHour()), "New 14", authorService.loadAuthor(26L).get(), comments, tags1
+						LocalDateTime.now().getHour()), "New 14", authorService.loadAuthor(26L).get(), comments, tags2
 				);
 		New n15 = new New(
 					null, "Title 15", LocalDateTime.of(1991, Month.APRIL, 14, LocalDateTime.now().getDayOfMonth(), 
@@ -352,7 +356,7 @@ class BlogSpringApiApplicationTests {
 	@Test
 	@Order(7)
 	void listAllNewTest() {
-		assertEquals(15, newService.listAllNews().size());
+		assertEquals(15, queryService.listAllNew().size());
 	}
 	
 	/**
@@ -378,12 +382,12 @@ class BlogSpringApiApplicationTests {
 	@Test
 	@Order(9)
 	void deleteNewTest() {
-		int quantityNewBefore = newService.listAllNews().size();
+		int quantityNewBefore = queryService.listAllNew().size();
 		int quantityNewAfter = quantityNewBefore;// Antes do teste, as quantidades são iguais
 		
 		newService.delete(newService.find(41L));// Excluir uma noticia e diminuir a quantidade
 		
-		quantityNewAfter = newService.listAllNews().size();// A nova quantidade
+		quantityNewAfter = queryService.listAllNew().size();// A nova quantidade
 		
 		assertNotEquals(quantityNewBefore, quantityNewAfter);// Não tem mais a mesma quantidade
 	}
@@ -404,8 +408,8 @@ class BlogSpringApiApplicationTests {
 		Author author = new Author(null, "Author test 1", Gender.MALE);
 		authorService.save(author);
 		
-		Tag t1 = new Tag(null, "#tag test 1");
-		Tag t2 = new Tag(null, "#tag test 2");
+		Tag t1 = new Tag(null, "#tag1");
+		Tag t2 = new Tag(null, "#tag2");
 		
 		tagService.save(t1);
 		tagService.save(t2);
@@ -535,15 +539,30 @@ class BlogSpringApiApplicationTests {
 	    	      .andExpect(MockMvcResultMatchers.jsonPath("$.comments.[0].content").value("New 3 updated"));
 	}
 	
-	
 	@Test
 	@Order(18)
+	void findNewGetByTagsTest() throws Exception {
+		this.mockMvc
+		.perform(
+					MockMvcRequestBuilders
+					.get("/new/tag")
+					.queryParam("tags", "#tag1,#tag2")
+					.contentType(MediaType.APPLICATION_JSON)
+				)
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$", Matchers.hasSize(8)));
+	}	
+	
+	
+	
+	@Test
+	@Order(19)
 	void nullPointExecptionPostNewTest() throws Exception {
 		Author author = new Author(null, "Author test 15", Gender.MALE);
 		authorService.save(author);
 		
-		Tag t1 = new Tag(null, "#tag test 1");
-		Tag t2 = new Tag(null, "#tag test 2");
+		Tag t1 = new Tag(null, "#tag1");
+		Tag t2 = new Tag(null, "#tag2");
 		
 		tagService.save(t1);
 		tagService.save(t2);
@@ -576,14 +595,14 @@ class BlogSpringApiApplicationTests {
 	
 	
 	@Test
-	@Order(19)
+	@Order(20)
 	@ExceptionHandler
 	void blankExecptionPostNewTest() throws Exception {
 		Author author = new Author(null, "Author test 16", Gender.MALE);
 		authorService.save(author);
 		
-		Tag t1 = new Tag(null, "#tag test 1");
-		Tag t2 = new Tag(null, "#tag test 2");
+		Tag t1 = new Tag(null, "#tag1");
+		Tag t2 = new Tag(null, "#tag2");
 		
 		tagService.save(t1);
 		tagService.save(t2);

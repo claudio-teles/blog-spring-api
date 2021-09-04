@@ -1,5 +1,6 @@
 package br.com.blogapi.controller;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.blogapi.model.New;
 import br.com.blogapi.service.NewService;
+import br.com.blogapi.service.QueryService;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -26,6 +28,8 @@ public class NewController {
 	
 	@Autowired
 	private NewService newService;
+	@Autowired
+	private QueryService queryService;
 	
 	@PostMapping("/new")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -47,6 +51,13 @@ public class NewController {
 	@ApiOperation(value = "Find new by title.")
 	public List<New> getNew(@RequestParam(name = "title") String title) throws Exception {
 		return newService.find(title);
+	}
+	
+	@GetMapping("/new/tag")
+	@ResponseStatus(HttpStatus.OK)
+	@ApiOperation(value = "Find new by tags.")
+	public Collection<New> getNewByTags(@RequestParam(name = "tags") String tags) {
+		return queryService.findNews(tags);
 	}
 	
 	@GetMapping("/new/pages")
