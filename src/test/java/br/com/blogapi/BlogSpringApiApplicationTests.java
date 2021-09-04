@@ -1,4 +1,4 @@
-﻿package br.com.blogapi;
+package br.com.blogapi;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
