@@ -46,7 +46,7 @@ public class NewController {
 		return newService.find(idNew);
 	}
 	
-	@GetMapping("/new")
+	@GetMapping("/new/title")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Find new by title.")
 	public List<New> getNew(@RequestParam(name = "title") String title) throws Exception {
@@ -67,14 +67,14 @@ public class NewController {
 		return newService.listNewsWithPages(topOfPage, endOfPage);
 	}
 	
-	@PutMapping("/new")
+	@PutMapping("/new/{idNew}/edit")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Update a news.")
 	public New updateNews(@RequestBody New _new) throws Exception {
 		return newService.save(_new);
 	}
 	
-	@PutMapping("/new/comment")
+	@PutMapping("/new")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Add new comment.")
 	public New addNewComment(@RequestBody New _new) throws Exception {

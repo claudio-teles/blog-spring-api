@@ -462,7 +462,7 @@ class BlogSpringApiApplicationTests {
 		this.mockMvc
 		.perform(
 				MockMvcRequestBuilders
-				.get("/new")
+				.get("/new/title")
 				.queryParam("title", "Title 14")
 				.contentType(MediaType.APPLICATION_JSON)
 				).andExpect(status().isOk())
@@ -492,7 +492,7 @@ class BlogSpringApiApplicationTests {
 		this.mockMvc
 		.perform(
 					MockMvcRequestBuilders
-						.put("/new")
+						.put("/new/{idNew}/edit", "34")
 						.content(objectMapper.writeValueAsString(nUpdate))
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
@@ -530,7 +530,7 @@ class BlogSpringApiApplicationTests {
 		this.mockMvc
 	    .perform(
 	    		  MockMvcRequestBuilders
-		    	      .put("/new/comment")
+		    	      .put("/new")
 		    	      .content(objectMapper.writeValueAsString(_new))
 		    	      .contentType(MediaType.APPLICATION_JSON)
 		    	      .accept(MediaType.APPLICATION_JSON)
@@ -585,7 +585,7 @@ class BlogSpringApiApplicationTests {
 		
 		Assertions.assertThatThrownBy( () -> this.mockMvc.perform(
 	    		  MockMvcRequestBuilders
-		    	      .put("/new/comment")
+		    	      .put("/new")
 		    	      .content(objectMapper.writeValueAsString(n))
 		    	      .contentType(MediaType.APPLICATION_JSON)
 		    	      .accept(MediaType.APPLICATION_JSON)
@@ -625,7 +625,7 @@ class BlogSpringApiApplicationTests {
 		
 		Assertions.assertThatThrownBy( () -> this.mockMvc.perform(
 	    		  MockMvcRequestBuilders
-		    	      .put("/new/comment")
+		    	      .put("/new")
 		    	      .content(objectMapper.writeValueAsString(n))
 		    	      .contentType(MediaType.APPLICATION_JSON)
 		    	      .accept(MediaType.APPLICATION_JSON)
