@@ -79,16 +79,16 @@ class BlogSpringApiApplicationTests {
 	@Order(1)
 	void createAuthorTest() {
 		try {
-			assertEquals(1L, authorService.save(new Reader(null, "Reader 1", Gender.MALE)).getIdAuthor());
-			assertEquals(2L, authorService.save(new Reader(null, "Reader 2", Gender.MALE)).getIdAuthor());
-			assertEquals(3L, authorService.save(new Reader(null, "Reader 3", Gender.FEMALE)).getIdAuthor());
-			assertEquals(4L, authorService.save(new Reader(null, "Reader 4", Gender.MALE)).getIdAuthor());
-			assertEquals(5L, authorService.save(new Reader(null, "Reader 5", Gender.MALE)).getIdAuthor());
-			assertEquals(6L, authorService.save(new Reader(null, "Reader 6", Gender.FEMALE)).getIdAuthor());
-			assertEquals(7L, authorService.save(new Reader(null, "Reader 7", Gender.MALE)).getIdAuthor());
-			assertEquals(8L, authorService.save(new Reader(null, "Reader 8", Gender.MALE)).getIdAuthor());
-			assertEquals(9L, authorService.save(new Reader(null, "Reader 9", Gender.FEMALE)).getIdAuthor());
-			assertEquals(10L, authorService.save(new Reader(null, "Reader 10", Gender.FEMALE)).getIdAuthor());
+			assertEquals(1L, authorService.save(new Author(null, "Reader 1", Gender.MALE)).getIdAuthor());
+			assertEquals(2L, authorService.save(new Author(null, "Reader 2", Gender.MALE)).getIdAuthor());
+			assertEquals(3L, authorService.save(new Author(null, "Reader 3", Gender.FEMALE)).getIdAuthor());
+			assertEquals(4L, authorService.save(new Author(null, "Reader 4", Gender.MALE)).getIdAuthor());
+			assertEquals(5L, authorService.save(new Author(null, "Reader 5", Gender.MALE)).getIdAuthor());
+			assertEquals(6L, authorService.save(new Author(null, "Reader 6", Gender.FEMALE)).getIdAuthor());
+			assertEquals(7L, authorService.save(new Author(null, "Reader 7", Gender.MALE)).getIdAuthor());
+			assertEquals(8L, authorService.save(new Author(null, "Reader 8", Gender.MALE)).getIdAuthor());
+			assertEquals(9L, authorService.save(new Author(null, "Reader 9", Gender.FEMALE)).getIdAuthor());
+			assertEquals(10L, authorService.save(new Author(null, "Reader 10", Gender.FEMALE)).getIdAuthor());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -369,7 +369,7 @@ class BlogSpringApiApplicationTests {
 		New n2 = n1;
 		n1.setContent("New 10 updated");
 		try {
-			n2 = newService.uptate(n1.getIdNew(), n1);
+			n2 = newService.uptate(n1);
 			assertNotEquals(n1, n2);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -486,19 +486,20 @@ class BlogSpringApiApplicationTests {
 	@Test
 	@Order(15)
 	void updateNewControlerTest() throws Exception {
-		New nUpdate = newService.find(34L);
-		nUpdate.setContent("Content test 1 updated!");
+		New nUpdate = newService.find(33L);
+		
+		nUpdate.setContent("New 7 updated!");
 		
 		this.mockMvc
 		.perform(
 					MockMvcRequestBuilders
-						.put("/new/{idNew}/edit", "34")
+						.put("/new/{idNew}/update", "33")
 						.content(objectMapper.writeValueAsString(nUpdate))
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 				)
 		.andExpect(status().isOk())
-		.andExpect(MockMvcResultMatchers.jsonPath("$.content").value("Content test 1 updated!"));
+		.andExpect(MockMvcResultMatchers.jsonPath("$.content").value("New 7 updated!"));
 	}
 	
 	@Test
@@ -507,7 +508,7 @@ class BlogSpringApiApplicationTests {
 		this.mockMvc
 		.perform(
 					MockMvcRequestBuilders
-						.delete("/new/{idNew}", "37")
+						.delete("/new/{idNew}", "45")
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 				)
@@ -518,19 +519,19 @@ class BlogSpringApiApplicationTests {
 	@Order(17)
 	void updateCommentControllerTest() throws Exception {
 		Author reader = Reader.builder().authorsName("Reader 11").gender(Gender.FEMALE).build();
-		authorService.save(reader);
-		Comment comment = Comment.builder().content("New 3 updated").date(LocalDateTime.now()).author(reader).build();
+		Author r = authorService.save(reader);
+		Comment comment = Comment.builder().content("New 3 updated").date(LocalDateTime.now()).author(r).build();
 		Comment c = commentService.save(comment);
 		
 		List<Comment> comments = new ArrayList<>();
 		comments.add(c);
-		New _new = newService.find(29L);
+		New _new = newService.find(33L);
 		_new.setComments(comments);
 		
 		this.mockMvc
 	    .perform(
 	    		  MockMvcRequestBuilders
-		    	      .put("/new")
+		    	      .put("/new/{idNew}", "33")
 		    	      .content(objectMapper.writeValueAsString(_new))
 		    	      .contentType(MediaType.APPLICATION_JSON)
 		    	      .accept(MediaType.APPLICATION_JSON)
@@ -585,7 +586,7 @@ class BlogSpringApiApplicationTests {
 		
 		Assertions.assertThatThrownBy( () -> this.mockMvc.perform(
 	    		  MockMvcRequestBuilders
-		    	      .put("/new")
+		    	      .post("/new")
 		    	      .content(objectMapper.writeValueAsString(n))
 		    	      .contentType(MediaType.APPLICATION_JSON)
 		    	      .accept(MediaType.APPLICATION_JSON)
@@ -625,7 +626,7 @@ class BlogSpringApiApplicationTests {
 		
 		Assertions.assertThatThrownBy( () -> this.mockMvc.perform(
 	    		  MockMvcRequestBuilders
-		    	      .put("/new")
+		    	      .put("/new/{idNew}/update", "42")
 		    	      .content(objectMapper.writeValueAsString(n))
 		    	      .contentType(MediaType.APPLICATION_JSON)
 		    	      .accept(MediaType.APPLICATION_JSON)

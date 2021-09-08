@@ -3,7 +3,9 @@ package br.com.blogapi.model;
 import javax.persistence.Entity;
 
 import br.com.blogapi.enumeration.Gender;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 public class Reader extends Author {
 

@@ -1,16 +1,31 @@
 package br.com.blogapi.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import br.com.blogapi.dao.AuthorDAO;
+import br.com.blogapi.dao.CommentDAO;
 import br.com.blogapi.dao.NewDAO;
+import br.com.blogapi.dao.TagDAO;
+import br.com.blogapi.model.Comment;
 import br.com.blogapi.model.New;
+import br.com.blogapi.model.Tag;
 
 @Service
 public class NewService {
+	
+	@Autowired
+	private AuthorDAO authorDao;
+	
+	@Autowired
+	private TagDAO tagDao;
+	
+	@Autowired
+	private CommentDAO commentDao;
 	
 	@Autowired
 	private NewDAO newDAO;
@@ -23,6 +38,24 @@ public class NewService {
 			} else if (_new.getContent().equals("")) {
 				throw new Exception("Blank content exception");
 			}
+			
+			List<Tag> tags = new ArrayList<>();
+			_new.getTags().forEach(t -> {
+				tags.add(tagDao.create(t));// Salvar instancia de objeto transiente não salvo
+			});
+			
+			List<Comment> comments = new ArrayList<>();
+			_new.getComments().forEach(c -> {
+				c.setAuthor(authorDao.createAuthor(c.getAuthor()));
+				comments.add(commentDao.createComment(c));// Salvar instancia de objeto transiente não salvo
+			});
+			
+			_new.setAuthorName(authorDao.createAuthor(_new.getAuthorName()));// Salvar instancia de objeto transiente não salvo
+			
+			_new.setTags(tags);
+			_new.setComments(comments);
+			
+			
 			return newDAO.createNew(_new);
 		}
 		
@@ -61,9 +94,9 @@ public class NewService {
 	}
 	
 	@SuppressWarnings("unlikely-arg-type")
-	public New uptate(Long idNew, New _new) throws Exception {
+	public New uptate(New _new) throws Exception {
 		
-		if (idNew != null && _new.getTitle() != null && _new.getContent() != null && _new.getAuthorName() != null) {
+		if (_new.getIdNew() != null && _new.getTitle() != null && _new.getContent() != null && _new.getAuthorName() != null) {
 			if (_new.getTitle().equals("")) {
 				throw new Exception("Blank title exception");
 			}
@@ -73,7 +106,11 @@ public class NewService {
 			if (_new.getAuthorName().equals("")) {
 				throw new Exception("Blank author exception");
 			}
-			New n = find(idNew);
+			
+			//Author a = authorDao.createAuthor(_new.getAuthorName());
+			
+			New n = find(_new.getIdNew());
+			
 			n.setTitle(_new.getTitle());
 			n.setDateTime(_new.getDateTime());
 			n.setContent(_new.getContent());
