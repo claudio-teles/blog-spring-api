@@ -114,9 +114,13 @@ public class NewService {
 			n.setTitle(_new.getTitle());
 			n.setDateTime(_new.getDateTime());
 			n.setContent(_new.getContent());
-			n.setAuthorName(_new.getAuthorName());
-			n.setComments(_new.getComments());
-			n.setTags(_new.getTags());
+			n.setAuthorName(authorDao.createAuthor(_new.getAuthorName()));
+			List<Comment> cms = new ArrayList<>();
+			_new.getComments().forEach(cm -> {cms.add(commentDao.createComment(cm));});
+			n.setComments(cms);
+			List<Tag> tags = new ArrayList<>();
+			_new.getTags().forEach(t -> {tags.add(tagDao.create(t));});
+			n.setTags(tags);
 			
 			return save(n);
 		}
